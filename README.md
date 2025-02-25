@@ -17,6 +17,7 @@ Compromised Website Scanner is an advanced security tool designed to scan websit
 
 * [Abuse.ch API Key](https://urlhaus-api.abuse.ch/)
 * [Google Safe Browsing API Key](https://developers.google.com/safe-browsing/v4)
+* [Virus Total API Key](https://docs.virustotal.com/reference/overview)
 
 ## Usage
 
