@@ -9,6 +9,11 @@ Compromised Website Scanner is an advanced security tool designed to scan websit
 * Identifies CMS and cross-references against the CVE database 💻
 * Provides an option to display results or save them to CSV 📊
 
+## Requirements
+
+* Abuse.ch API Key
+* Google Safe Browsing API Key
+
 > Scan webpage and display to the screen
 
 ```bash
