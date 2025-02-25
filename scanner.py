@@ -12,8 +12,8 @@ from requests.exceptions import RequestException, Timeout
 load_dotenv()
 
 # API keys from environment
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-ABUSE_API_KEY = os.getenv("ABUSE_API_KEY")
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+ABUSE_API_KEY = os.getenv('ABUSE_API_KEY')
 
 # Function to validate if the URL is well-formed and uses HTTP/HTTPS
 def is_valid_url(url):
@@ -141,11 +141,12 @@ def scan_website(url):
     # Scan the HTML for any malicious content patterns
     malicious_html_content = scan_html_for_malicious_content(soup)
 
-    # Check each external JS link for threats
+    # Check each external JS link for threats (only domain checked)
     js_threats = []
     for js_url in js_links:
-        js_safe_browsing = check_safe_browsing(js_url)
-        js_abuse_ch = check_abuse_ch(js_url)
+        js_domain = urlparse(js_url).netloc  # Only check domain
+        js_safe_browsing = check_safe_browsing(js_domain)
+        js_abuse_ch = check_abuse_ch(js_domain)
         js_threats.append({
             'url': js_url,
             'safe_browsing': js_safe_browsing,
