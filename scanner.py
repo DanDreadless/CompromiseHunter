@@ -52,10 +52,11 @@ def check_safe_browsing(url):
 
 # Function to check against Abuse.ch
 def check_abuse_ch(url):
-    api_url = f"https://abuse.ch/api/v1/check_url/{ABUSE_API_KEY}/"
+    api_url = f"https://urlhaus-api.abuse.ch/v1/url/"
+    header = {"Auth-Key": ABUSE_API_KEY}
     params = {"url": url}
     try:
-        response = requests.get(api_url, params=params)
+        response = requests.get(api_url, headers=header, params=params)
         response.raise_for_status()
         data = response.json()
         return data.get("result", "")
