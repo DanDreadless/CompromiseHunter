@@ -32,3 +32,18 @@ python scanner.py http://example.com
 ```bash
 python scanner.py http://example.com --csv
 ```
+
+> Example Output
+
+```bash
+Scanning https://dishalawfirm.com...
+Google Safe Browsing: CLEAN
+Abuse.ch: None
+VirusTotal: 4/96 detections
+Malicious HTML Content Detected:
+  Pattern found: document\.location
+HTTP Header Misconfigurations:
+  Missing header: X-Content-Type-Options
+  Missing header: X-XSS-Protection
+  Missing header: X-Frame-Options
+```
