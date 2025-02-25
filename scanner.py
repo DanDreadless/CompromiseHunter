@@ -73,7 +73,12 @@ def check_abuse_ch(url):
 # Function to fetch page content and extract JavaScript links
 def fetch_page(url):
     try:
+<<<<<<< Updated upstream
         response = requests.get(url, timeout=10)
+=======
+        url = url if url.startswith(('http://', 'https://')) else f"https://{url}"
+        response = requests.get(url, timeout=10, verify=False)
+>>>>>>> Stashed changes
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
         js_links = []
