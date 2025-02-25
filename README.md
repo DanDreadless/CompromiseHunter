@@ -11,12 +11,12 @@ Compromised Website Scanner is an advanced security tool designed to scan websit
 
 > Scan webpage and display to the screen
 
-```python
+```bash
 python scanner.py http://example.com
 ```
 
 > Scan Webpage and output to CSV
 
-```python
+```bash
 python scanner.py http://example.com --csv
 ```
