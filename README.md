@@ -1,12 +1,9 @@
 # 🛡️ Compromised Website Scanner 🕵️‍♂️
 Compromised Website Scanner is an advanced security tool designed to scan websites for malicious content, vulnerabilities, and suspicious activity. It checks the site itself as well as any external JavaScript resources it links to, ensuring comprehensive coverage.
 
-## DISCLAIMER
+## DISCLAIMER:
 
-```
-This Project is a work in progress and currently untested.
-Check back for updates!
-```
+`This Project is a work in progress and currently untested - Check back for updates!`
 
 ## 🔍 Key Features:
 
