@@ -15,6 +15,7 @@ load_dotenv()
 # API keys from environment
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 ABUSE_API_KEY = os.getenv('ABUSE_API_KEY')
+VIRUSTOTAL_API_KEY = os.getenv('VIRUSTOTAL_API_KEY')
 
 # Function to validate if the URL is well-formed and uses HTTP/HTTPS
 def is_valid_url(url):
@@ -70,6 +71,26 @@ def check_abuse_ch(url):
         print(f"Error checking Abuse.ch for {url}: {e}")
         return ""
 
+# Function to check against VirusTotal
+def check_vt(url):
+    api_url = f"https://www.virustotal.com/vtapi/v2/url/report"
+    params = {
+        'apikey': os.getenv('VIRUSTOTAL_API_KEY'),
+        'resource': url
+    }
+    try:
+        response = requests.get(api_url, params=params)
+        json_response = response.json()
+        if json_response['response_code'] == 0:
+            return "None"
+        else:
+            verdict = json_response['positives']
+            total = json_response['total']
+            return f"{verdict}/{total} detections"
+    except RequestException as e:
+        return f"Error checking VirusTotal for {url}: {e}"
+    
+
 # Function to fetch page content and extract JavaScript links
 def fetch_page(url):
     try:
@@ -116,7 +137,7 @@ def check_redirects(url):
 
 # Function to check HTTP headers for misconfigurations
 def check_http_headers(url):
-    headers_to_check = ['X-Content-Type-Options', 'X-XSS-Protection', 'Strict-Transport-Security']
+    headers_to_check = ['X-Content-Type-Options', 'X-XSS-Protection', 'Strict-Transport-Security', 'X-Frame-Options']
     misconfigurations = []
     try:
         response = requests.head(url, timeout=10)
@@ -142,6 +163,7 @@ def scan_website(url):
     # Check Safe Browsing and Abuse.ch for the website URL
     safe_browsing_matches = check_safe_browsing(url)
     abuse_ch_result = check_abuse_ch(url)
+    vt_check = check_vt(url)
 
     # Scan the HTML for any malicious content patterns
     malicious_html_content = scan_html_for_malicious_content(soup)
@@ -149,9 +171,8 @@ def scan_website(url):
     # Check each external JS link for threats (only domain checked)
     js_threats = []
     for js_url in js_links:
-        js_domain = urlparse(js_url).netloc  # Only check domain
-        js_safe_browsing = check_safe_browsing(js_domain)
-        js_abuse_ch = check_abuse_ch(js_domain)
+        js_safe_browsing = check_safe_browsing(js_url)
+        js_abuse_ch = check_abuse_ch(js_url)
         js_threats.append({
             'url': js_url,
             'safe_browsing': js_safe_browsing,
@@ -169,6 +190,7 @@ def scan_website(url):
         'url': url,
         'safe_browsing': safe_browsing_matches,
         'abuse_ch': abuse_ch_result,
+        'virustotal': vt_check,
         'malicious_html': malicious_html_content,
         'js_threats': js_threats,
         'redirects': redirects_detected,
@@ -191,6 +213,9 @@ def display_results(result):
     if result['abuse_ch']:
         print(f"Abuse.ch: {result['abuse_ch']}")
 
+    if result['virustotal']:
+        print(f"VirusTotal: {result['virustotal']}")
+
     # Malicious HTML Content
     if result['malicious_html']:
         print(f"Malicious HTML Content Detected: ")
@@ -200,7 +225,7 @@ def display_results(result):
     # JavaScript Threats
     if result['js_threats']:
         for js in result['js_threats']:
-            if js['safe_browsing'] or js['abuse_ch']:
+            if js['safe_browsing'] or js['abuse_ch'] != "None":
                 print(f"JavaScript URL: {js['url']}")
                 print(f"  Safe Browsing: {js['safe_browsing']}")
                 print(f"  Abuse.ch: {js['abuse_ch']}")
