@@ -9,13 +9,11 @@ Compromised Website Scanner is an advanced security tool designed to scan websit
 * Identifies CMS and cross-references against the CVE database 💻
 * Provides an option to display results or save them to CSV 📊
 
-
        ___                              _         _  _          _           
       / __|___ _ __  _ __ _ _ ___ _ __ (_)___ ___| || |_  _ _ _| |_ ___ _ _ 
      | (__/ _ \ '  \| '_ \ '_/ _ \ '  \| (_-</ -_) __ | || | ' \  _/ -_) '_|
       \___\___/_|_|_| .__/_| \___/_|_|_|_/__/\___|_||_|\_,_|_||_\__\___|_|  
                     |_|                                                     
-
 
 > Scan webpage and display to the screen
 
