@@ -32,11 +32,11 @@ def check_safe_browsing(url):
     api_url = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={GOOGLE_API_KEY}"
     payload = {
         "client": {
-            "clientId": "websiteScanner",
+            "clientId": "CompromiseHunter",
             "clientVersion": "1.0"
         },
         "threatInfo": {
-            "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING"],
+            "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "POTENTIALLY_HARMFUL_APPLICATION", "UNWANTED_SOFTWARE"],
             "platformTypes": ["ANY_PLATFORM"],
             "threatEntryTypes": ["URL"],
             "threatEntries": [{"url": url}]
@@ -73,7 +73,6 @@ def check_abuse_ch(url):
 # Function to fetch page content and extract JavaScript links
 def fetch_page(url):
     try:
-        url = url if url.startswith(('http://', 'https://')) else f"https://{url}"
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
