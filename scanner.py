@@ -1,5 +1,6 @@
 import re
 import os
+import json
 import requests
 import argparse
 import pandas as pd
@@ -54,12 +55,17 @@ def check_safe_browsing(url):
 def check_abuse_ch(url):
     api_url = f"https://urlhaus-api.abuse.ch/v1/url/"
     header = {"Auth-Key": ABUSE_API_KEY}
-    params = {"url": url}
+    data = {"url": url}
     try:
-        response = requests.get(api_url, headers=header, params=params)
-        response.raise_for_status()
-        data = response.json()
-        return data.get("result", "")
+        response = requests.post(api_url, data, headers=header)
+        json_response = response.json()
+        if json_response['query_status'] == 'ok':
+            print(json.dumps(json_response, indent=4, sort_keys=False))
+        elif json_response['query_status'] == 'no_results':
+            return "None"
+        else:
+            json_response = (json_response['query_status'])
+            return json_response
     except RequestException as e:
         print(f"Error checking Abuse.ch for {url}: {e}")
         return ""
